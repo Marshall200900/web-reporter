@@ -1,16 +1,23 @@
 <script lang="ts">
-    export let data: { mainText: string, subText: string };
+    export let data: { mainText: string, subText: string, image: File };
     let inputRef = null;
     const openFileSelection = () => {
         inputRef.click();
     }
+
+    const attachFile = () => {
+        if (inputRef && inputRef.files && inputRef.files.length > 0) {
+            data.image = inputRef.files[0];
+        }
+    }
+
     export let onSubmit;
 </script>
 <form class="form" on:submit={onSubmit}>
     <div class="form__title">Опишите проблему</div>
     <input bind:value={data.mainText} type="text" class="form__short-description form__textfield" placeholder="Краткое название">
     <textarea bind:value={data.subText} class="form__description form__textfield" placeholder="Описание ошибки"/>
-    <input type="file" class="form__file" bind:this={inputRef}>
+    <input type="file" accept="image/*" class="form__file" bind:this={inputRef} on:change={attachFile}>
     <button type="button" class="form__button-attach-file form__button" on:click={openFileSelection}>Приложить файл</button>
     <button class="form__button-submit form__button">Отправить</button>
 </form>

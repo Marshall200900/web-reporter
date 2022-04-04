@@ -20,12 +20,24 @@
     }
     
     let data = {
-        mainText: '', subText: ''
+        mainText: '', subText: '', image: null
     }
 
     const onSubmit = (e) => {
         e.preventDefault();
-        currentTab = Tab.Error
+        currentTab = Tab.Ok;
+        
+        const { mainText, subText, image } = data;
+
+        const formData = new FormData();
+        formData.append('mainText', mainText);
+        formData.append('subText', subText);
+        formData.append('file', image);
+
+        fetch('http://localhost:3002/sendData', {
+            method: 'POST',
+            body: formData,
+        });
     }
 
 </script>
@@ -67,7 +79,6 @@
         height: 465px;
         width: 350px;
         position: absolute;
-        font-family: 'Roboto', sans-serif;
         border-radius: 10px;
         box-shadow: 0 0 2px rgba($color: #000000, $alpha: 0.2);
 
@@ -80,13 +91,9 @@
             align-items: center;
             gap: 10px;
         }
-
         &__icon {
             width: 20px;
             height: 20px;
-        }
-        &__icon-back {
-            justify-self: left
         }
         &__icon-settings {
             width: 25px;

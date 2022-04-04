@@ -1,0 +1,19 @@
+@mixin transform($prop) {
+    -webkit-transform: $prop;
+    -ms-transform: $prop;
+    -moz-transform: $prop;
+    transform: $prop;
+}
+@mixin box-sizing($prop) {
+    -webkit-box-sizing: $prop;
+    -moz-box-sizing: $prop;
+    box-sizing: $prop;
+}
+@mixin justify-self($prop) {
+    -ms-grid-column-align: $prop;
+    justify-self: $prop;
+}
+@mixin filter($prop) {
+    -webkit-filter: $prop;
+    filter: $prop;
+}

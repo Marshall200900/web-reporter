@@ -1,5 +1,4 @@
 <script lang="ts">
-    export let position;
 </script>
 
 <div class="settings">
@@ -23,6 +22,7 @@
 </div>
 
 <style lang="scss">
+    @import 'src/reporter/scss/_base.scss';
     .settings {
         margin-top: 20px;
 
@@ -63,7 +63,7 @@
             position: absolute;
 
             &:hover {
-                filter: brightness(110%);
+                @include filter(brightness(110%));
             }
             &_selected {
                 background-color: #0FB50C ;
@@ -119,7 +119,7 @@
             width: 130px;
             cursor: pointer;
             &:hover {
-                filter: brightness(110%);
+                @include filter(brightness(110%));
             }
         }
 
