@@ -8,7 +8,8 @@
     "build:script": "vite build --config vite-reporter.config.ts",
     "build": "vite build  --config vite-configurator.config.ts",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "dev:host": "vite --config vite-configurator.config.ts --host 0.0.0.0"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.30",
