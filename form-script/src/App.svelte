@@ -3,5 +3,5 @@
     
 </script>
 
-<h1>Configurator</h1>
+<h1>Web reporter configurator</h1>
 <Reporter />

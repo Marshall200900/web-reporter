@@ -1,15 +1,164 @@
 <script lang="ts" context="module">
-  //   export const load = async ({ fetch }) => {
-  //    try {
-  //      const response = await fetch("api/endpoint.json");
-  //      return {
-  //        props: { data: await response.json() }
-  //      };
-  //    } catch (error) {
-  //      console.error(`Error in load function for /: ${error}`);
-  //    }
-  //  };
+	//   export const load = async ({ fetch }) => {
+	//    try {
+	//      const response = await fetch("api/endpoint.json");
+	//      return {
+	//        props: { data: await response.json() }
+	//      };
+	//    } catch (error) {
+	//      console.error(`Error in load function for /: ${error}`);
+	//    }
+	//  };
 </script>
+
 <script lang="ts">
-  
+	import Kanban from '../components/kanban-table.svelte';
+  import KanbanColumn from '../components/kanban-column.svelte';
+  import Input from '../components/input.svelte';
+  import { browser } from '$app/env';
+
+  const createTaskFunc = () => {
+    let id = -1;
+    return ((id: number) => (title: string, category: string, labels: string[]) => {
+      id++;
+      return {
+        id, title, labels, category, temp: null
+      }
+    })(id);
+  }
+  const createTask = createTaskFunc();
+  let tasks = [
+    createTask('Заголовок сдвинут вправо', 'Todo', ['bug', 'bow']),
+    createTask('Кнопка отправки не работает', 'Todo', ['bug', 'low']),
+    createTask('Пропадает поле формы', 'In progress', ['bug', 'low']),
+    createTask('Обновить версию React', 'Done', ['bug', 'low']),
+  ];
+
+  const createColumnPropsFunc = () => {
+    let id = -1;
+    return ((id: number) => (title: string, pColor: string, sColor: string) => {
+      id++;
+      return {
+        id, title, pColor, sColor
+      }
+    })(id);
+  }
+  const createColumnProps = createColumnPropsFunc();
+
+  const columns = [
+    createColumnProps('Todo', '#AFFFA1', '#41C62C'),
+    createColumnProps('In progress', '#C1DAFF', '#0059DF'),
+    createColumnProps('Done', '#FFE0CA', '#FF6B00'),
+  ];
+  import { afterUpdate, onDestroy, onMount } from "svelte";
+  let dragParams = {
+    id: null,
+    x: null,
+    y: null,
+    width: null,
+    height: null,
+    relX: null,
+    relY: null,
+  }
+  const removeTask = (id: number) => {
+    tasks = [
+      ...tasks.slice(0, id),
+      ...tasks.slice(id + 1)
+    ];
+  }
+  const onMouseUp = (event: MouseEvent) => {
+    if(dragParams.id === null) return;
+    const taskId = tasks.findIndex(el => el.temp);
+    const task = tasks[taskId];
+    const columnDOMElements = columns.map(el => document.getElementById(`column${el.id}`));
+    const middlePartOfTask = { x: event.clientX - dragParams.relX + dragParams.width / 2, y: event.clientY - dragParams.relY + dragParams.height / 2 };
+    const columnId = columnDOMElements.find(el => {
+      const { x, y, height, width } = el.getBoundingClientRect();
+      return (
+        x <= middlePartOfTask.x &&
+        x + width >= middlePartOfTask.x &&
+        y <= middlePartOfTask.y &&
+        y + height >= middlePartOfTask.y
+        )
+      })?.id;
+    switch(columnId) {
+      case "column0": task.category = 'Todo'; break;
+      case "column1": task.category = 'In progress'; break;
+      case "column2": task.category = 'Done'; break;
+      default: break; 
+    }
+    console.log(tasks);
+    
+    removeTask(tasks.findIndex(el => el.id === dragParams.id));
+    removeTask(tasks.findIndex(el => el.id === dragParams.id));
+    console.log(tasks);
+    const newTask = { ...task, temp: null };
+    tasks = [
+      ...tasks, newTask
+    ]
+    
+    dragParams = {...dragParams, id: null}
+  }
+  const onMouseMove = (event: MouseEvent) => {
+    let { clientX, clientY } = event;
+    const { relX, relY } = dragParams;
+    dragParams = { ...dragParams, x: clientX - relX, y: clientY - relY};
+    console.log(tasks)
+  }
+  const onMouseDown = (id: number, x: number, y: number, width: number, height: number, relX: number, relY: number) => {
+    
+    dragParams = { id, x: x - relX, y: y - relY, width, height, relX, relY };
+    const taskDragged = tasks.find(el => el.id === id);
+    tasks = [...tasks, { ...taskDragged, temp: true }];
+  }
+  onMount(() => {
+    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', onMouseMove);
+  });
+  onDestroy(() => {
+    if(browser) {
+      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mousemove', onMouseMove);
+    }
+  });
+  afterUpdate(() => {
+    console.log('updated');
+  });
+  $: filterTasks = (title: string) => {
+    return tasks.filter(el => el.category === title)
+  }
 </script>
+
+<div class="all-site-contents">
+	<div class="all-site-contents__main-content">
+    <Input />
+    <Kanban>
+      {#each columns as col}
+        <KanbanColumn
+          onMouseDown={onMouseDown}
+          id={col.id}
+          dragParams={dragParams}
+          columnTitle={col.title}
+          tasks={filterTasks(col.title)}
+          pColor={col.pColor}
+          sColor={col.sColor}
+        />
+      {/each}
+    </Kanban>
+	</div>
+</div>
+<style lang="scss">
+  .all-site-contents {
+    width: 100%;
+    display: flex;
+
+    justify-content: center;
+    &__main-content {
+      width: 1200px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
+
+</style>
