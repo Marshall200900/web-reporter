@@ -74,7 +74,7 @@
     .form {
         display: flex;
         flex-direction: column;
-
+        background-color: #FFFFFF;
         padding: 10px;
         height: 465px;
         width: 350px;
