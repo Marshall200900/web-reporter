@@ -22,8 +22,10 @@
     let data = {
         mainText: '', subText: '', image: null
     }
-
-    const onSubmit = (e) => {
+    const dataString = document.getElementById('web-reporter').getAttribute('data-form');
+    const endpointURLs: string[] = JSON.parse(dataString).endpoints;
+    console.log(endpointURLs)
+    const onSubmit = async (e) => {
         e.preventDefault();
         currentTab = Tab.Ok;
         
@@ -34,10 +36,14 @@
         formData.append('subText', subText);
         formData.append('file', image);
 
-        fetch('http://localhost:3002/sendData', {
-            method: 'POST',
-            body: formData,
-        });
+        const results = await Promise.all(endpointURLs.map(async url => {
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData,
+            });
+            return response.text();
+        }))
+        console.log(results);
     }
 
 </script>

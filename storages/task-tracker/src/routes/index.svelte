@@ -1,14 +1,5 @@
 <script lang="ts" context="module">
-	//   export const load = async ({ fetch }) => {
-	//    try {
-	//      const response = await fetch("api/endpoint.json");
-	//      return {
-	//        props: { data: await response.json() }
-	//      };
-	//    } catch (error) {
-	//      console.error(`Error in load function for /: ${error}`);
-	//    }
-	//  };
+  export let foo: string;
 </script>
 
 <script lang="ts">
@@ -16,7 +7,6 @@
   import KanbanColumn from '../components/kanban-column.svelte';
   import Input from '../components/input.svelte';
   import { browser } from '$app/env';
-
   const createTaskFunc = () => {
     let id = -1;
     return ((id: number) => (title: string, category: string, labels: string[]) => {
@@ -66,6 +56,9 @@
       ...tasks.slice(id + 1)
     ];
   }
+  afterUpdate(() => {
+    
+  })
   const onMouseUp = (event: MouseEvent) => {
     if(dragParams.id === null) return;
     const taskId = tasks.findIndex(el => el.temp);
@@ -87,11 +80,9 @@
       case "column2": task.category = 'Done'; break;
       default: break; 
     }
-    console.log(tasks);
     
     removeTask(tasks.findIndex(el => el.id === dragParams.id));
     removeTask(tasks.findIndex(el => el.id === dragParams.id));
-    console.log(tasks);
     const newTask = { ...task, temp: null };
     tasks = [
       ...tasks, newTask
@@ -103,7 +94,6 @@
     let { clientX, clientY } = event;
     const { relX, relY } = dragParams;
     dragParams = { ...dragParams, x: clientX - relX, y: clientY - relY};
-    console.log(tasks)
   }
   const onMouseDown = (id: number, x: number, y: number, width: number, height: number, relX: number, relY: number) => {
     
@@ -120,9 +110,6 @@
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousemove', onMouseMove);
     }
-  });
-  afterUpdate(() => {
-    console.log('updated');
   });
   $: filterTasks = (title: string) => {
     return tasks.filter(el => el.category === title)

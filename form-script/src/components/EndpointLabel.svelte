@@ -1,12 +1,37 @@
 <script lang="ts">
     export let title: string;
     export let url: string;
+
+    let opened = false;
+    let moved = false;
 </script>
-<div class="endpoint-label">
+<div class="endpoint-label" on:click={() => {
+    opened = !opened;
+    // $: setTimeout(() => moved = !moved);
+}}>
     <span class="endpoint-label__title">{title}</span>
     <span class="endpoint-label__url">{url}</span>
 </div>
+{#if opened}
+    <div class={`endpoint-opened ${moved ? "" : "endpoint-opened_moved"}`}>
+
+    </div>
+{/if}
 <style lang="scss">
+    .endpoint-opened {
+        background-color: #35C128;
+        width: 230px;
+        position: absolute;
+        height: 100px;
+        border-radius: 30px;
+        transition: all 1s ease 0s;
+        &_moved {
+            left: 50%;
+            top: 50%;
+            transition: all 1s ease;
+        }
+    }
+
     .endpoint-label {
         background-color: #35C128;
         width: 230px;

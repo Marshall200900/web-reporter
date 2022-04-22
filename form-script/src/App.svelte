@@ -26,7 +26,7 @@
 <div class="button-container">
     <Button text={"Get script"} backgroundColor={"#35C128"} color={"#FFFFFF"} onClick={onSendClick}/>
 </div>
-<!-- <Reporter /> -->
+<Reporter />
 <style lang="scss">
     .endpoints {
         display: flex;
