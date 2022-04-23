@@ -24,7 +24,6 @@
     }
     const dataString = document.getElementById('web-reporter').getAttribute('data-form');
     const endpointURLs: string[] = JSON.parse(dataString).endpoints;
-    console.log(endpointURLs)
     const onSubmit = async (e) => {
         e.preventDefault();
         currentTab = Tab.Ok;

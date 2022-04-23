@@ -6,7 +6,6 @@
 	import Kanban from '../components/kanban-table.svelte';
   import KanbanColumn from '../components/kanban-column.svelte';
   import Input from '../components/input.svelte';
-  import { browser } from '$app/env';
   const createTaskFunc = () => {
     let id = -1;
     return ((id: number) => (title: string, category: string, labels: string[]) => {
@@ -16,6 +15,8 @@
       }
     })(id);
   }
+
+
   const createTask = createTaskFunc();
   let tasks = [
     createTask('Заголовок сдвинут вправо', 'Todo', ['bug', 'bow']),
@@ -56,8 +57,17 @@
       ...tasks.slice(id + 1)
     ];
   }
-  afterUpdate(() => {
-    
+  const initServerSendEvents = () => {
+    const eventSource = new EventSource('http://localhost:4000/getData');
+    eventSource.onmessage = (event) => {
+      console.log(event.data);
+    }
+    eventSource.onopen = (event) => {
+      console.log(event);
+    }
+  }
+  onMount(() => {
+    initServerSendEvents();
   })
   const onMouseUp = (event: MouseEvent) => {
     if(dragParams.id === null) return;
@@ -88,6 +98,7 @@
       ...tasks, newTask
     ]
     
+    
     dragParams = {...dragParams, id: null}
   }
   const onMouseMove = (event: MouseEvent) => {
@@ -104,12 +115,14 @@
   onMount(() => {
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mousemove', onMouseMove);
+
+
+
+
   });
   onDestroy(() => {
-    if(browser) {
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mousemove', onMouseMove);
-    }
+    document.removeEventListener('mouseup', onMouseUp);
+    document.removeEventListener('mousemove', onMouseMove);
   });
   $: filterTasks = (title: string) => {
     return tasks.filter(el => el.category === title)
