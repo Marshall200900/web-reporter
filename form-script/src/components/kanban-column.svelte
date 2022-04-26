@@ -6,7 +6,14 @@
     export let onMouseDown: (id: number, x: number, y: number, width: number, height: number, relX: number, relY: number) => void;
     export let dragParams: { id: number, x: number, y: number, width: number, height: number, relX: number, relY: number };
     export let columnTitle: string;
-    export let tasks: {id: number, title: string, labels: string[], category: string, temp: boolean}[];
+    export let tasks: {
+        report_id: number,
+        status: string,
+        title: string,
+        date_created: string,
+        tags: string,
+        temp: boolean
+    }[] = [];
     export let pColor: string;
     export let sColor: string;
     export let id: number;
@@ -41,7 +48,7 @@
     </div>
     <div class="kanban-col__tasks">
         {#each tasks as task}
-            <KanbanTask dragParams={dragParams} onMouseDown={onMouseDown} temp={task.temp} id={task.id} taskTitle={task.title} arrayOfLabels={task.labels.map(getLabelByText)} />
+            <KanbanTask dragParams={dragParams} onMouseDown={onMouseDown} temp={task.temp} id={task.report_id} taskTitle={task.title} arrayOfLabels={task.tags.split(',').map(getLabelByText)} />
         {/each}
     </div>
 </div>
