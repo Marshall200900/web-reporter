@@ -1,6 +1,7 @@
 <script lang="ts">
     import { link, Route, Router } from 'svelte-routing';
     import ConfiguratorPage from './components/ConfiguratorPage.svelte';
+    import DocsPage from './components/DocsPage.svelte';
     import TrackerPage from './components/TrackerPage.svelte';
 </script>
 
@@ -8,4 +9,5 @@
     <nav class="navbar">navbar</nav>
     <Route path='config' component={ConfiguratorPage} />
     <Route path='/' component={TrackerPage} />
+    <Route path='/docs' component={DocsPage} />
 </Router>

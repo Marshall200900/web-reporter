@@ -1,0 +1,155 @@
+openapi: 3.0.3
+info:
+  title: "Reporter API"
+  description: "API to get Form results from reporter"
+  version: 1.0.0
+servers:
+  - url: localhost:1000
+  - url: arseniysidorov.store
+    description: Arseniy Sidorov Store
+  - url: arseniysidorov.ru
+    description: Arseniy Sidorov
+paths:
+  "/reports":
+    get:
+      parameters:
+      - name: short
+        in: query
+        description: Get short data
+        required: false
+        schema:
+          default: false
+          type: boolean
+      - name: offset
+        in: query
+        description: The offset of the query
+        required: false
+        schema:
+          default: 0
+          type: number
+      - name: limit
+        in: query
+        description: The limit of the number of reports returned
+        required: false
+        schema:
+          default: 20
+          type: number
+      tags: ["reports"]
+      summary: Return all reports
+      responses:
+        "200":
+          description: All went well
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/report"
+    post:
+      requestBody:
+        description: The data of the form
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/report-sent"
+      tags: ["reports"]
+      summary: Post a report
+      responses:
+        "200":
+          description: A post was created
+          content:
+            application/json:
+              schema:  
+                type: object
+                properties: {}
+  "/reports/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: ID of the report
+      required: true
+      schema:
+        type: string
+    get:
+      tags: ["reports"]
+      summary: Get the report by ID
+      responses:
+        "200":
+          description: All went well
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/report"
+    put:
+      tags: ["reports"]
+      summary: Update the report by ID
+      responses:
+        "200":
+          description: All went well
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+    delete:
+      tags: ["reports"]
+      summary: Delete the report by ID
+      responses:
+        "200":
+          description: Deletion completed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}     
+  "/img/{img_name}":
+    parameters:
+    - name: img_name
+      in: path
+      description: The directory of the image
+      required: true
+      schema:
+        type: string
+    get:
+      tags: ["images"]
+      summary: Get the Image name
+      responses:
+        "200":
+          description: Image has sent
+          content:
+            image/jpg+jpeg+png:
+              schema:
+                type: string
+                format: binary
+  
+components:
+  schemas:
+    report-sent:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the report
+        maintext:
+          type: string
+          description: Text of the report
+        images:
+          type: array
+          items:
+            type: string
+            format: binary
+    report:
+      type: object
+      properties:
+        id:
+          type: number
+          description: the report identificator
+        title:
+          type: string
+          description: Title of the report
+        maintext:
+          type: string
+          description: Text of the report
+        images_id:
+          type: array
+          items:
+            type: number
