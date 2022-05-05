@@ -2,7 +2,7 @@
     import { Label } from "./kanban-task-label.svelte";
 
     import KanbanTask from "./kanban-task.svelte";
-
+    export let openEditModal: (id: number) => void;
     export let onMouseDown: (id: number, x: number, y: number, width: number, height: number, relX: number, relY: number) => void;
     export let dragParams: { id: number, x: number, y: number, width: number, height: number, relX: number, relY: number };
     export let columnTitle: string;
@@ -28,6 +28,10 @@
             default: return LOW;
         }
     }
+    const formatDate = (stringDate) => {
+        const [d, m, y] = stringDate.split('-');
+        return Date.parse(`${y}-${m}-${d}`)
+    }
 </script>
 
 <div class="kanban-col" style={`background-color: ${pColor}`} id={`column${id}`}>
@@ -47,8 +51,8 @@
         </div>
     </div>
     <div class="kanban-col__tasks">
-        {#each tasks as task}
-            <KanbanTask dragParams={dragParams} onMouseDown={onMouseDown} temp={task.temp} id={task.report_id} taskTitle={task.title} arrayOfLabels={task.tags.split(',').map(getLabelByText)} />
+        {#each tasks.sort((a, b) => formatDate(a.date_created) - formatDate(b.date_created)) as task}
+            <KanbanTask openEditModal={() => openEditModal(task.report_id)} dragParams={dragParams} onMouseDown={onMouseDown} temp={task.temp} id={task.report_id} taskTitle={task.title} arrayOfLabels={task.tags.split(',').map(getLabelByText)} />
         {/each}
     </div>
 </div>

@@ -2,6 +2,10 @@
     import Kanban from "../components/kanban-table.svelte";
     import KanbanColumn from "../components/kanban-column.svelte";
     import Input from "../components/input.svelte";
+
+    let taskIdToEdit: number = null;
+    let modalEditVisible: boolean = false;
+
     // const createTaskFunc = () => {
     //   let id = -1;
     //   return ((id: number) => (title: string, category: string, labels: string[]) => {
@@ -34,7 +38,6 @@
     }[] = [];
     getShortData().then(value => {
         tasks = value;
-        console.log(tasks);
     })
     const createColumnPropsFunc = () => {
         let id = -1;
@@ -56,6 +59,7 @@
         createColumnProps("Done", "#FFE0CA", "#FF6B00"),
     ];
     import { afterUpdate, onDestroy, onMount } from "svelte";
+    import ModalTaskEdit from "./ModalTaskOpen.svelte";
     let dragParams = {
         id: null,
         x: null,
@@ -68,6 +72,10 @@
     const removeTask = (id: number) => {
         tasks = [...tasks.slice(0, id), ...tasks.slice(id + 1)];
     };
+    const openEditModal = (id: number) => {
+        taskIdToEdit = id;
+        modalEditVisible = true;
+    }
     // const initServerSendEvents = () => {
     //     const eventSource = new EventSource("http://localhost:4000/getData");
     //     eventSource.onmessage = (event) => {
@@ -158,6 +166,7 @@
     <Kanban>
       {#each columns as col}
         <KanbanColumn
+          openEditModal={openEditModal}
           {onMouseDown}
           id={col.id}
           {dragParams}
@@ -169,15 +178,23 @@
       {/each}
     </Kanban>
   </div>
+  {#if modalEditVisible}
+    <ModalTaskEdit
+        onClose={() => modalEditVisible = false}
+        taskId={taskIdToEdit}
+        />
+  {/if}
 </div>
 
 <style lang="scss">
   .all-site-contents {
     width: 100%;
+    position: relative;
     display: flex;
 
     justify-content: center;
     &__main-content {
+
       width: 1200px;
       display: flex;
       flex-direction: column;
