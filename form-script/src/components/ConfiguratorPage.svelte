@@ -17,10 +17,11 @@
 <h2>Endpoints</h2>
 <div class="endpoints">
     {#each configData.endpoints as endpoint}
-        <EndpointLabel title={endpoint.title} url={endpoint.url} />
+    <EndpointLabel title={endpoint.title} url={endpoint.url} />
     {/each}
     <EndpointLabelNew />
 </div>
+<h2>Tokens</h2>
 <h2>Reporter script</h2>
 <textarea placeholder="The script goes here..."></textarea>
 <div class="button-container">

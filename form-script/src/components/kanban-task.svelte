@@ -25,15 +25,14 @@
         const rect = target.getBoundingClientRect();
         const x = event.clientX - rect.left; //x position within the element.
         const y = event.clientY - rect.top;  //y position within the element.
-        console.log(event.clientX, event.clientY);
-        console.log(event.offsetX, event.offsetY);
+        
         console.log(target.getBoundingClientRect().x,target.getBoundingClientRect().y)
         onMouseDown(
             id,
             event.clientX, event.clientY,
             target.offsetWidth,
             target.offsetHeight,
-            event.offsetX + 5, event.offsetY + 5,
+            x + 8, y + 27, // WHY DO I NEED THESE NUMBERS???
         );
     }
 </script>
@@ -45,8 +44,10 @@
     <span class="task__text" 
     on:mousedown={(e) => {
         e.stopPropagation();
+        e.preventDefault();
     }}
-    on:mouseup={(e) => {
+    on:click={(e) => {
+        e.preventDefault();
         e.stopPropagation();
         openEditModal();
     }}>

@@ -24,7 +24,7 @@
     //   createTask('Обновить версию React', 'Done', ['bug', 'low']),
     // ];
     const getShortData = async (limit: number = 50, offset: number = 0, short: boolean = true) => {
-        const response = await fetch(`http://localhost:1000/getData?short=${short}&limit=${limit}&offset=${offset}`);
+        const response = await fetch(`http://localhost:1000/reports?short=${short}&limit=${limit}&offset=${offset}`);
         const data = await response.json();
         return data;
     }

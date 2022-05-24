@@ -26,7 +26,14 @@
 	$: object = getValueObj(label);
 </script>
 
-<div class="task-label" style={`background-color: ${object.color}`}>
+<div on:mousedown={(e) => {
+	e.preventDefault();
+	e.stopPropagation();
+}} on:mouseup={(e) => {
+	e.preventDefault();
+	e.stopPropagation();
+}}
+	class="task-label" style={`background-color: ${object.color}`}>
 	<span class="task-label__text">{object.text}</span>
 </div>
 <style type="scss">

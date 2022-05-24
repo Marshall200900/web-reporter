@@ -31,9 +31,9 @@
         const { mainText, subText, image } = data;
 
         const formData = new FormData();
-        formData.append('mainText', mainText);
-        formData.append('subText', subText);
-        formData.append('file', image);
+        formData.append('title', mainText);
+        formData.append('maintext', subText);
+        formData.append('images', image);
 
         const results = await Promise.all(endpointURLs.map(async url => {
             const response = await fetch(url, {
@@ -42,7 +42,6 @@
             });
             return response.text();
         }))
-        console.log(results);
     }
 
 </script>

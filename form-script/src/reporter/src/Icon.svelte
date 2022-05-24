@@ -1,6 +1,5 @@
 <script lang="ts">
     export let open: () => void;
-
 </script>
 
 <div class="icon" on:click={open}>

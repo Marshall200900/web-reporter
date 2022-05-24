@@ -2,7 +2,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import cors from 'cors';
 import formidable from 'express-formidable'
 import express from 'express';
-import { Blob } from 'buffer';
+import fetch from 'node-fetch';
 import path from 'path';
 const token = '5283036706:AAERdKokPo85NSHbIGxOMNqOZVbEd5ng7mc';
 const chat_id = '-1001695358653';
@@ -15,13 +15,14 @@ app.use(cors())
 app.use(express.json());
 app.use(formidable());
 
-app.post('/sendData', (req, res) => {
+fetch('http://localhost:1000/subscribe');
+
+app.post('/update', (req, res) => {
   const { mainText, subText } = req.fields;
 
   const filepath = req.files.file.path;
   const __dirname = path.resolve();
   const message = `*${mainText}*\n\n${subText}`;
-  console.log(message);
   const opts = {
     parse_mode: 'MarkdownV2',
     caption: message
