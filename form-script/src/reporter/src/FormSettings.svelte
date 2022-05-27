@@ -1,20 +1,37 @@
 <script lang="ts">
+import { onMount } from "svelte";
+
+    export let disableReporter;
+    export let position;
+    export let setDisableReporter: () => void;
+    export let setPosition: (position: string) => void;
+
+    const sides = {
+        LeftTop: 'LeftTop',
+        LeftBottom: 'LeftBottom',
+        RightTop: 'RightTop',
+        RightBottom: 'RightBottom',
+    }
+    $: cellSelected = (currentSide) => {
+        console.log(currentSide, position);
+        return currentSide === position ? "settings__pos-cell_selected" : "";
+    }
 </script>
 
 <div class="settings">
     <div class="settings__pos-container">
         <div class="settings__pos-table">
-            <div class="settings__pos-cell settings__pos-cell-lt"></div>
-            <div class="settings__pos-cell settings__pos-cell-lb"></div>
-            <div class="settings__pos-cell settings__pos-cell-rt"></div>
-            <div class="settings__pos-cell settings__pos-cell-rb settings__pos-cell_selected"></div>
+            <div on:click={() => setPosition(sides.LeftTop)} class={`settings__pos-cell settings__pos-cell-lt ${cellSelected(sides.LeftTop)}`}></div>
+            <div on:click={() => setPosition(sides.LeftBottom)} class={`settings__pos-cell settings__pos-cell-lb ${cellSelected(sides.LeftBottom)}`}></div>
+            <div on:click={() => setPosition(sides.RightTop)} class={`settings__pos-cell settings__pos-cell-rt ${cellSelected(sides.RightTop)}`}></div>
+            <div on:click={() => setPosition(sides.RightBottom)} class={`settings__pos-cell settings__pos-cell-rb ${cellSelected(sides.RightBottom)}`}></div>
         </div>
         <div class="settings__pos-container-text">
             Позиционирование
         </div>
     </div>
     <div class="settings__remove-button-container">
-        <button class="settings__remove-button-btn">Убрать иконку</button>
+        <button on:click={setDisableReporter} class="settings__remove-button-btn">Убрать иконку</button>
         <div class="settings__remove-button-text">
             Иконка вернется при перезапуске страницы
         </div>
