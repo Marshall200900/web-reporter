@@ -1,5 +1,6 @@
 <script lang="ts">
     export let data: { mainText: string, subText: string, image: File };
+    export let setTagsTab: () => void;
     let inputRef = null;
     const openFileSelection = () => {
         inputRef.click();
@@ -17,8 +18,11 @@
     <div class="form__title">Опишите проблему</div>
     <input bind:value={data.mainText} type="text" class="form__short-description form__textfield" placeholder="Краткое название">
     <textarea bind:value={data.subText} class="form__description form__textfield" placeholder="Описание ошибки"/>
-    <input type="file" accept="image/*" class="form__file" bind:this={inputRef} on:change={attachFile}>
-    <button type="button" class="form__button-attach-file form__button" on:click={openFileSelection}>Приложить файл</button>
+    <div class="form__file-input-container">
+        <input type="file" accept="image/*" class="form__file" bind:this={inputRef} on:change={attachFile}>
+        <button type="button" class="form__button-attach-file form__button" on:click={openFileSelection}>Приложить файл</button>
+        <button type="button" class="form__button-tags form__button" on:click={setTagsTab}>Теги</button>
+    </div>
     <button class="form__button-submit form__button">Отправить</button>
 </form>
 <style lang="scss">
@@ -28,26 +32,37 @@
         display: flex;
         flex-direction: column;
         gap: 10px;
+
+        &__files-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1 1;
+            overflow-y: scroll;
+        }
         
+        &__file-input-container {
+            gap: 10px;
+            display: flex;
+            height: 40px;
+        }
         &__button {
             font-family: 'Roboto', sans-serif;
             border-radius: 10px;
             cursor: pointer;
             padding: 10px 7px;
             font-size: 1rem;
-        }
-
-        &__button-attach-file {
 
             background-color: $background-color;
             border: 2px solid $border-color;
             color: #737373;
-            width: 160px;            
+            flex: 1 1;
             outline-color: #18A0FB;
             font-weight: bolder;
         }
+
         &__button-submit {
-            
+            font-weight: 500;
             outline-color: #18A0FB;
             border-color: $border-color;
             background-color: #0FB50C;

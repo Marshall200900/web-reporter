@@ -5,7 +5,7 @@
     export let backgroundColor: string;
 </script>
 
-<div class="button" onclick={onClick} style={`background-color: ${backgroundColor}`}>
+<div class="button" on:click={onClick} style={`background-color: ${backgroundColor}`}>
     <span class="button__text" style={`color: ${color}`}>{text}</span>
 </div>
 <style lang="scss">

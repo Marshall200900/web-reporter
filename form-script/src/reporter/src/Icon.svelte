@@ -1,16 +1,15 @@
 <script lang="ts">
     export let open: () => void;
+    export let positionStyles: string;
 </script>
 
-<div class="icon" on:click={open}>
+<div class="icon" on:click={open} style={positionStyles}>
   <span class="icon__text">R</span>
 </div>
 
 <style lang="scss">
     .icon {
         position: absolute;
-        bottom: 0;
-        right: 0;
         width: 50px;
         height: 50px;
 

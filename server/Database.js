@@ -96,9 +96,28 @@ export default class Database {
                 })
         });
     }
+
+    // tags
+    getTags() {
+        return new Promise((resolve, reject) => {
+            this.db.all('SELECT * FROM tags', (err, rows) => {
+                if(err) {
+                    reject(err);
+                }
+                resolve(rows);
+            })
+        })
+    }
+
     // users
     getUser(login, password) {
-
-    }
+        return new Promise((resolve, reject) => {
+            this.db.get(`SELECT * FROM users WHERE login="${login}" AND password="${password}"`, (err, row) => {
+                    if(err) {
+                        reject(err);
+                    }
+                    resolve(row);
+                })
+        });    }
 
 }
