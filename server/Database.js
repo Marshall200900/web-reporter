@@ -97,6 +97,19 @@ export default class Database {
         });
     }
 
+    // tokens
+    getTokens() {
+        return new Promise((resolve, reject) => {
+            this.db.all(`SELECT token_id, token FROM tokens LEFT JOIN users ON tokens.token_id = users.user_id`, (err, rows) => {
+                if(err) {
+                    reject(err);
+                }
+                resolve(rows);
+            })
+        })
+    }
+
+
     // tags
     getTags() {
         return new Promise((resolve, reject) => {

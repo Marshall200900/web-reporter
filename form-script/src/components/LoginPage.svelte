@@ -25,7 +25,7 @@
       console.log(token);
       setAuthorized(true);
     } else {
-      alert('Something is wrong!');
+      console.log('Please authorize!');
     }
 
   }

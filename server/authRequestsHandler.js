@@ -16,7 +16,9 @@ export const authenticateToken = (req, res, next) => {
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
     console.log(err)
 
-    if (err) return res.sendStatus(403)
+    if (err) return res.sendStatus(403);
+    req.user = user
+
     next();
   })
 }
@@ -47,7 +49,7 @@ export const initAuthRequestsHandler = (app, db) => {
       db.getUser(login, password)
       .then((row) => {
         if (row && row.login === login && row.password === password) {
-          const token = generateAccessToken({ username: req.body.username });
+          const token = generateAccessToken({ username: login });
           res.json(token);
   
         } else {
