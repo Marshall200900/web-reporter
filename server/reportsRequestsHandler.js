@@ -22,9 +22,9 @@ export const initReportsRequestHandler = (app, db) => {
     const requestData = { title, maintext, tags, filenames };
 
     db.postReport(requestData)
-      .then((value) => {
+      .then(() => {
         res.setHeader("Access-Control-Allow-Origin", "*");
-        res.end();
+        res.send();
       })
       .catch((reason) => {
         res.status(500).send(reason);
@@ -122,7 +122,6 @@ export const initReportsRequestHandler = (app, db) => {
     const filenames = req.files.map((el) => el.filename);
 
     const requestData = { title, maintext, tags, filenames };
-    // sendIncomingData(requestData)
 
     db.postReport(requestData)
       .then((value) => {
@@ -184,17 +183,6 @@ export const initReportsRequestHandler = (app, db) => {
     }
   });
 
-  app.put("/reports/:id", authenticateToken, (req, res) => {
-    const { id } = req.params;
-    db.updateData(id, req.query)
-      .then(() => {
-        res.setHeader("Access-Control-Allow-Origin", "*");
-        res.end();
-      })
-      .catch((reason) => {
-        res.status(500).send(reason);
-      });
-  });
 
   app.delete("/reports/:id", authenticateToken, (req, res) => {
     const { id } = req.params;
