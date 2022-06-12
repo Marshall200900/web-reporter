@@ -15,15 +15,15 @@
     export let onSubmit;
 </script>
 <form class="form" on:submit={onSubmit}>
-    <div class="form__title">Опишите проблему</div>
-    <input bind:value={data.mainText} type="text" class="form__short-description form__textfield" placeholder="Краткое название">
-    <textarea bind:value={data.subText} class="form__description form__textfield" placeholder="Описание ошибки"/>
+    <div class="form__title">Describe your problem</div>
+    <input bind:value={data.mainText} type="text" class="form__short-description form__textfield" placeholder="Short title">
+    <textarea bind:value={data.subText} class="form__description form__textfield" placeholder="Description"/>
     <div class="form__file-input-container">
         <input type="file" accept="image/*" class="form__file" bind:this={inputRef} on:change={attachFile}>
-        <button type="button" class="form__button-attach-file form__button" on:click={openFileSelection}>Приложить файл</button>
-        <button type="button" class="form__button-tags form__button" on:click={setTagsTab}>Теги</button>
+        <button type="button" class="form__button-attach-file form__button" on:click={openFileSelection}>Attach a file</button>
+        <button type="button" class="form__button-tags form__button" on:click={setTagsTab}>Tags</button>
     </div>
-    <button class="form__button-submit form__button">Отправить</button>
+    <button class="form__button-submit form__button">Send</button>
 </form>
 <style lang="scss">
     $background-color: #F9F9F9;
