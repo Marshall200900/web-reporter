@@ -18,6 +18,7 @@
         'Authorization': 'Basic ' + base64.encode(login + ":" + password),
       }
     });
+    console.log(res);
     if(res.status === 200) {
       const token = await res.json();
       // set token in cookie

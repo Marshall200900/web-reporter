@@ -68,7 +68,7 @@
   const createColumnProps = createColumnPropsFunc();
 
   const columns = [
-    createColumnProps("Todo", "#AFFFA1", "#41C62C"),
+    createColumnProps("To do", "#AFFFA1", "#41C62C"),
     createColumnProps("Doing", "#C1DAFF", "#0059DF"),
     createColumnProps("Done", "#FFE0CA", "#FF6B00"),
   ];

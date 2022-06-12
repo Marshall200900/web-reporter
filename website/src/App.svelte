@@ -46,3 +46,4 @@
 {:else}
   <LoginPage setAuthorized={(auth) => (authorized = auth)} />
 {/if}
+

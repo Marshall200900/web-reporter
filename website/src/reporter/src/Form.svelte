@@ -78,10 +78,7 @@
     subText: "",
     image: null,
   };
-  const dataString = document
-    .getElementById("web-reporter")
-    .getAttribute("data-form");
-  const endpointURLs: string[] = JSON.parse(dataString).endpoints;
+
   const onSubmit = async (e) => {
     e.preventDefault();
     currentTab = Tab.Ok;
@@ -92,16 +89,15 @@
     formData.append("title", mainText);
     formData.append("maintext", subText);
     formData.append("images", image);
-
-    const results = await Promise.all(
-      endpointURLs.map(async (url) => {
-        const response = await fetch(url, {
-          method: "POST",
-          body: formData,
-        });
-        return response.text();
-      })
-    );
+    const result = async () => {
+      
+      const response = await fetch('http://localhost:1000/reports', {
+        method: "POST",
+        body: formData,
+      });
+      return response.text();
+    }
+    await result();
   };
 </script>
 
