@@ -36,7 +36,7 @@ export const initAuthRequestsHandler = (app, db) => {
         console.log(err)
     
         if (err) return res.sendStatus(403)
-    
+        res.setHeader("Access-Control-Allow-Origin", "*");
         req.user = user
         res.status(200).end();
       })
@@ -45,11 +45,12 @@ export const initAuthRequestsHandler = (app, db) => {
     app.post('/login', (req, res) => {
       const auth = (req.headers.authorization || '').split(' ')[1] || '';
       const [login, password] = Buffer.from(auth, 'base64').toString().split(':')
-      
       db.getUser(login, password)
       .then((row) => {
         if (row && row.login === login && row.password === password) {
           const token = generateAccessToken({ username: login });
+          res.setHeader("Access-Control-Allow-Origin", "*");
+          
           res.json(token);
   
         } else {
@@ -58,6 +59,7 @@ export const initAuthRequestsHandler = (app, db) => {
       })
       .catch((err) => {
         console.log(err);
+        res.setHeader("Access-Control-Allow-Origin", "*");
         res.status(500).end();
       })
 
