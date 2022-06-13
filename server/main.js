@@ -10,8 +10,8 @@ const db = new Database('./records.db');
 
 
 const app = express();
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 initTokensRequestsHandler(app, db);
 initReportsRequestHandler(app, db);
 initAuthRequestsHandler(app, db);

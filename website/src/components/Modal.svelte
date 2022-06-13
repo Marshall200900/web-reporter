@@ -4,10 +4,11 @@
 </script>
 
 <div class="paranja" transition:fade on:click={(e) =>{
-    e.stopPropagation();
     onClick();
 }}>
-    <div class="modal" transition:fade>
+    <div on:click={(e) => {
+        e.stopPropagation();
+    }} class="modal" transition:fade>
         <slot>no content provided</slot>
     </div>
 </div>
@@ -27,6 +28,8 @@
         background-color: rgba($color: #e4e4e4, $alpha: .4);
     }
     .modal {
+        z-index: 4;
+
         background-color: #35C128;
         border-radius: 20px;
         max-width: calc(100% - 20px);

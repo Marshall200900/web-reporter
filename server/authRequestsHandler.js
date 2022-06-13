@@ -10,14 +10,13 @@ const generateAccessToken = (username) => {
 export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization']
   const token = authHeader && authHeader.split(' ')[1]
-  console.log(token, authHeader, req.headers)
   if (token == null) return res.sendStatus(401)
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
     console.log(err)
 
     if (err) return res.sendStatus(403);
-    req.user = user
+    req.userId = user
 
     next();
   })
@@ -29,7 +28,6 @@ export const initAuthRequestsHandler = (app, db) => {
     app.post('/auth', (req, res, next) => {
       const authHeader = req.headers['authorization']
       const token = authHeader && authHeader.split(' ')[1]
-      console.log(token, authHeader, req.headers)
       if (token == null) return res.sendStatus(401)
     
       jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
@@ -37,7 +35,7 @@ export const initAuthRequestsHandler = (app, db) => {
     
         if (err) return res.sendStatus(403)
         res.setHeader("Access-Control-Allow-Origin", "*");
-        req.user = user
+        req.userId = user
         res.status(200).end();
       })
     });
@@ -48,7 +46,7 @@ export const initAuthRequestsHandler = (app, db) => {
       db.getUser(login, password)
       .then((row) => {
         if (row && row.login === login && row.password === password) {
-          const token = generateAccessToken({ username: login });
+          const token = generateAccessToken({ username: row.user_id });
           res.setHeader("Access-Control-Allow-Origin", "*");
           
           res.json(token);
