@@ -30,7 +30,7 @@
     .modal {
         z-index: 4;
 
-        background-color: #35C128;
+        background-color: #ffffff;
         border-radius: 20px;
         max-width: calc(100% - 20px);
         max-height: calc(100% - 20px);

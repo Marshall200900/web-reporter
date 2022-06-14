@@ -64,7 +64,7 @@
     status: string;
     title: string;
     date_created: string;
-    tags: {tag_id: number, name: string, color: string}[];
+    tags: {tag_id: string, name: string, color: string}[];
     temp: boolean;
   }[] = [];
   getShortData().then((value) => {
@@ -91,7 +91,7 @@
     createColumnProps("Done", "#FFE0CA", "#FF6B00"),
   ];
   import { afterUpdate, onDestroy, onMount } from "svelte";
-  import ModalTaskEdit from "./ModalTaskOpen.svelte";
+  import ModalTaskOpen from "./ModalTaskOpen.svelte";
   let dragParams = {
     id: null,
     x: null,
@@ -212,7 +212,7 @@
     </Kanban>
   </div>
   {#if modalEditVisible}
-    <ModalTaskEdit
+    <ModalTaskOpen
       onClose={() => (modalEditVisible = false)}
       taskId={taskIdToEdit}
     />
@@ -221,6 +221,7 @@
 
 <style lang="scss">
   .all-site-contents {
+    padding-top: 10px;
     width: 100%;
     position: relative;
     display: flex;

@@ -66,6 +66,7 @@ export const initReportsRequestHandler = (app, db) => {
     if (image) {
       if (!isNaN(Number(image))) {
         db.getImagesListById(id).then((value) => {
+          
           const imgUrl = value.images_links.split(",")[Number(image)];
           const __dirname = path.resolve(path.dirname(""));
 
@@ -76,9 +77,14 @@ export const initReportsRequestHandler = (app, db) => {
       }
     } else {
       db.getReportById(id)
-        .then((el) => {
-          el.images_count =
-            el.images_links && el.images_links.split(",").length;
+        .then(async (el) => {
+          const tags = await db.getTags();
+          const tagIds = el.tags;
+          if(tagIds) {
+            el.tags = tagIds.split(',').map(tagId => tags.find(tag => tag.tag_id === parseInt(tagId)))
+          }
+
+          el.images_count = el.images_links && el.images_links.split(",").length;
           delete el.images_links;
           res.setHeader("Access-Control-Allow-Origin", "*");
           res.send(el);

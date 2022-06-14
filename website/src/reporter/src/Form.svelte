@@ -88,7 +88,7 @@
     const formData = new FormData();
     formData.append("title", mainText);
     formData.append("maintext", subText);
-    formData.append("tagIds", tags.map(tag => tag.id).join(','));
+    formData.append("tagIds", tags.filter(tag => tag.checked).map(tag => tag.id).join(','));
     formData.append("images", image);
     const result = async () => {
       

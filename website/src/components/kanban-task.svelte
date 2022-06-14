@@ -2,14 +2,12 @@
 
 </script>
 <script lang="ts">
-
-    import type { Label } from "./kanban-task-label.svelte";
     import TaskLabel from './kanban-task-label.svelte';
     export let taskTitle: string;
     export let dragParams: { id: string, x: number, y: number, width: number, relX: number, relY: number };
     export let temp: boolean;
     export let id: string;
-    export let arrayOfLabels: Label[];
+    export let arrayOfLabels: {tag_id: string, name: string, color: string}[];
     export let deleteTask: () => void;
     export let onMouseDown: (id: string, x: number, y: number, width: number, height: number, relX: number, relY: number) => void;
     export let openEditModal: () => void;
@@ -42,7 +40,9 @@
     style={styleParams}
     on:mousedown={mouseDownHandler}>
     <div class="task__title-container">
-        <span class="task__text"> 
+        <span on:mousedown={(e) => {
+            e.stopPropagation();
+        }} on:click={openEditModal} class="task__text"> 
             {taskTitle}
         </span>
         <span on:mousedown={(e) => {
@@ -52,8 +52,8 @@
         </span>
     </div>
     <div class="task__task-labels">
-        {#each arrayOfLabels as label}
-            <TaskLabel label={label} />
+        {#each arrayOfLabels as tag}
+            <TaskLabel tag={tag} />
         {/each}
     </div>
 </div>

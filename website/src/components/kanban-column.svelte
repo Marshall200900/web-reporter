@@ -1,6 +1,4 @@
 <script lang="ts">
-    import { Label } from "./kanban-task-label.svelte";
-
     import KanbanTask from "./kanban-task.svelte";
     export let openEditModal: (id: string) => void;
     export let deleteTask: (taskId: string) => void;
@@ -12,25 +10,12 @@
         status: string,
         title: string,
         date_created: string,
-        tags: {tag_id: number, name: string, color: string}[],
+        tags: {tag_id: string, name: string, color: string}[],
         temp: boolean
     }[] = [];
     export let pColor: string;
     export let sColor: string;
     export let id: number;
-
-    const getLabelByText = (label: string) => {
-        const { BUG, CRITICAL, LOW, BLOCKER, FEATURE, HIGH } = Label;
-        switch(label) {
-            case 'bug': return BUG;
-            case 'critical': return CRITICAL;
-            case 'feature': return FEATURE;
-            case 'high': return HIGH;
-            case 'blocker': return BLOCKER;
-            case 'low':
-            default: return LOW;
-        }
-    }
     const formatDate = (stringDate) => {
         const [d, m, y] = stringDate.split('-');
         return Date.parse(`${y}-${m}-${d}`)
@@ -62,7 +47,7 @@
                 temp={task.temp}
                 id={task.report_id}
                 taskTitle={task.title}
-                arrayOfLabels={task.tags && task.tags.map(tag => getLabelByText(tag.name)) || []} 
+                arrayOfLabels={task.tags || []} 
                 deleteTask={() => deleteTask(task.report_id)}
             />
         {/each}

@@ -1,35 +1,5 @@
-<script lang="ts" context="module">
-	export enum Label {
-		BUG,
-		CRITICAL,
-		LOW,
-		BLOCKER,
-		FEATURE,
-		HIGH
-	}
-</script>
-
 <script lang="ts">
-	export let label: Label;
-	const getValueObj = (label: Label): { text: string; color: string } => {
-		const { BUG, CRITICAL, LOW, BLOCKER, HIGH, FEATURE } = Label;
-		switch (label) {
-			case BUG:
-				return { text: 'bug', color: '#FF0404' };
-			case CRITICAL:
-				return { text: 'critical', color: '#FF6A6A' };
-			case LOW:
-				return { text: 'low', color: '#4CDE3F' };
-			case HIGH:
-				return { text: 'high', color: '#4CDE3F' };
-			case FEATURE:
-				return { text: 'feature', color: 'yellow' };
-			case BLOCKER:
-			default:
-				return { text: 'bug', color: '#000000' };
-		}
-	};
-	$: object = getValueObj(label);
+	export let tag: {tag_id: string, name: string, color: string};
 </script>
 
 <div on:mousedown={(e) => {
@@ -39,8 +9,8 @@
 	e.preventDefault();
 	e.stopPropagation();
 }}
-	class="task-label" style={`background-color: ${object.color}`}>
-	<span class="task-label__text">{object.text}</span>
+	class="task-label" style={`background-color: ${tag.color}`}>
+	<span class="task-label__text">{tag.name}</span>
 </div>
 <style type="scss">
 	.task-label {
