@@ -51,6 +51,7 @@
     temp: boolean;
   }[] = [];
   getShortData().then((value) => {
+    console.log(value)
     tasks = value;
   });
   const createColumnPropsFunc = () => {

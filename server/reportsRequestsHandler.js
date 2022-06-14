@@ -16,10 +16,10 @@ const upload = multer({ storage: storage })
 
 export const initReportsRequestHandler = (app, db) => {
   app.post("/reports", authenticateToken, upload.array("images"), (req, res) => {
-    const { title, maintext, tags } = req.body;
+    const { title, maintext, tagIds } = req.body;
     const filenames = req.files.map((el) => el.filename);
 
-    const requestData = { title, maintext, tags, filenames };
+    const requestData = { title, maintext, tagIds, filenames };
 
     db.postReport(requestData)
       .then(() => {
@@ -39,11 +39,17 @@ export const initReportsRequestHandler = (app, db) => {
       promise = db.getReports(limit, offset);
     }
     promise
-      .then((value) => {
+      .then(async (value) => {
+
+        const tags = await db.getTags();
+
         value.map((el) => {
-          el.images_count =
-            el.images_links && el.images_links.split(",").length;
+          el.images_count = el.images_links && el.images_links.split(",").length;
           delete el.images_links;
+          const tagIds = el.tags;
+          el.tags = tagIds.split(',').map(tagId => tags.find(tag => tag.tag_id === parseInt(tagId)))
+
+          
         });
         res.setHeader("Access-Control-Allow-Origin", "*");
         res.send(value);

@@ -11,7 +11,7 @@
         status: string,
         title: string,
         date_created: string,
-        tags: string,
+        tags: {tag_id: number, name: string, color: string}[],
         temp: boolean
     }[] = [];
     export let pColor: string;
@@ -19,10 +19,12 @@
     export let id: number;
 
     const getLabelByText = (label: string) => {
-        const { BUG, CRITICAL, LOW, BLOCKER } = Label;
+        const { BUG, CRITICAL, LOW, BLOCKER, FEATURE, HIGH } = Label;
         switch(label) {
             case 'bug': return BUG;
             case 'critical': return CRITICAL;
+            case 'feature': return FEATURE;
+            case 'high': return HIGH;
             case 'blocker': return BLOCKER;
             case 'low':
             default: return LOW;
@@ -52,7 +54,7 @@
     </div>
     <div class="kanban-col__tasks">
         {#each tasks.sort((a, b) => formatDate(a.date_created) - formatDate(b.date_created)) as task}
-            <KanbanTask openEditModal={() => openEditModal(task.report_id)} dragParams={dragParams} onMouseDown={onMouseDown} temp={task.temp} id={task.report_id} taskTitle={task.title} arrayOfLabels={task.tags.split(',').map(getLabelByText)} />
+            <KanbanTask openEditModal={() => openEditModal(task.report_id)} dragParams={dragParams} onMouseDown={onMouseDown} temp={task.temp} id={task.report_id} taskTitle={task.title} arrayOfLabels={task.tags.map(tag => getLabelByText(tag.name))} />
         {/each}
     </div>
 </div>
