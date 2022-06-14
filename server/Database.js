@@ -41,7 +41,7 @@ export default class Database {
         const date = new Date().toISOString().split('T')[0].split('-');
         const parsedDate = `${date[2]}-${date[1]}-${date[0]}`;
         return this.runQuery('INSERT INTO reports (title, description, images_links, tags, date_created, status)' +
-        `VALUES ('${title}', '${maintext}', '${filenames.join(',')}', '${tagIds}', '${parsedDate}', 'Todo')`);
+        `VALUES ('${title}', '${maintext}', '${filenames.join(',')}', '${tagIds}', '${parsedDate}', 'To do')`);
     }
     // read
     getReportById(id) {

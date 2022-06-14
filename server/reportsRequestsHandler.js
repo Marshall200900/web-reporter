@@ -15,7 +15,7 @@ const upload = multer({ storage: storage })
 
 
 export const initReportsRequestHandler = (app, db) => {
-  app.post("/reports", authenticateToken, upload.array("images"), (req, res) => {
+  app.post("/reports", upload.array("images"), (req, res) => {
     const { title, maintext, tagIds } = req.body;
     const filenames = req.files.map((el) => el.filename);
 
@@ -47,7 +47,9 @@ export const initReportsRequestHandler = (app, db) => {
           el.images_count = el.images_links && el.images_links.split(",").length;
           delete el.images_links;
           const tagIds = el.tags;
-          el.tags = tagIds.split(',').map(tagId => tags.find(tag => tag.tag_id === parseInt(tagId)))
+          if(tagIds) {
+            el.tags = tagIds.split(',').map(tagId => tags.find(tag => tag.tag_id === parseInt(tagId)))
+          }
 
           
         });
@@ -114,11 +116,13 @@ export const initReportsRequestHandler = (app, db) => {
         });
       }
       db.deleteData(id)
-        .then(() => {
+        .then((result) => {
+          console.log(result);
           res.setHeader("Access-Control-Allow-Origin", "*");
           res.end();
         })
         .catch((reason) => {
+          console.log(reason);
           res.status(500).send(reason);
         });
     });

@@ -3,7 +3,7 @@
   import KanbanColumn from "../components/kanban-column.svelte";
   import Input from "../components/input.svelte";
 
-  let taskIdToEdit: number = null;
+  let taskIdToEdit: string = null;
   let modalEditVisible: boolean = false;
 
   // const createTaskFunc = () => {
@@ -23,6 +23,23 @@
   //   createTask('Пропадает поле формы', 'In progress', ['bug', 'low']),
   //   createTask('Обновить версию React', 'Done', ['bug', 'low']),
   // ];
+  const deleteTask = async (taskId: string) => {
+    const cookies = document.cookie.split(";");
+    const token = cookies.find((el) => el.includes("token="));
+    const tokenVal = token.split("=")[1];
+    const response = await fetch(
+      `http://localhost:1000/reports/${taskId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: "Basic " + tokenVal,
+        },
+      }
+    );
+    if(response.status === 200) {
+      removeTask(tasks.findIndex(task => task.report_id === taskId));
+    }
+  }
   const getShortData = async (
     limit: number = 50,
     offset: number = 0,
@@ -43,11 +60,11 @@
     return data;
   };
   let tasks: {
-    report_id: number;
+    report_id: string;
     status: string;
     title: string;
     date_created: string;
-    tags: string;
+    tags: {tag_id: number, name: string, color: string}[];
     temp: boolean;
   }[] = [];
   getShortData().then((value) => {
@@ -87,7 +104,7 @@
   const removeTask = (id: number) => {
     tasks = [...tasks.slice(0, id), ...tasks.slice(id + 1)];
   };
-  const openEditModal = (id: number) => {
+  const openEditModal = (id: string) => {
     taskIdToEdit = id;
     modalEditVisible = true;
   };
@@ -125,7 +142,7 @@
     })?.id;
     switch (columnId) {
       case "column0":
-        task.status = "Todo";
+        task.status = "To do";
         break;
       case "column1":
         task.status = "Doing";
@@ -150,7 +167,7 @@
     dragParams = { ...dragParams, x: clientX - relX, y: clientY - relY };
   };
   const onMouseDown = (
-    id: number,
+    id: string,
     x: number,
     y: number,
     width: number,
@@ -183,6 +200,7 @@
         <KanbanColumn
           {openEditModal}
           {onMouseDown}
+          {deleteTask}
           id={col.id}
           {dragParams}
           columnTitle={col.title}

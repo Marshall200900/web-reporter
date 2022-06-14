@@ -3,7 +3,7 @@ import { onMount } from "svelte";
 
     import Modal from "./Modal.svelte";
     export let onClose: () => void;
-    export let taskId: number;
+    export let taskId: string;
     let baseAddress = 'http://localhost:1000/reports/';
     let task: {
         report_id: number,

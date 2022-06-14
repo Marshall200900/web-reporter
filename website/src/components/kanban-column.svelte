@@ -2,12 +2,13 @@
     import { Label } from "./kanban-task-label.svelte";
 
     import KanbanTask from "./kanban-task.svelte";
-    export let openEditModal: (id: number) => void;
-    export let onMouseDown: (id: number, x: number, y: number, width: number, height: number, relX: number, relY: number) => void;
-    export let dragParams: { id: number, x: number, y: number, width: number, height: number, relX: number, relY: number };
+    export let openEditModal: (id: string) => void;
+    export let deleteTask: (taskId: string) => void;
+    export let onMouseDown: (id: string, x: number, y: number, width: number, height: number, relX: number, relY: number) => void;
+    export let dragParams: { id: string, x: number, y: number, width: number, height: number, relX: number, relY: number };
     export let columnTitle: string;
     export let tasks: {
-        report_id: number,
+        report_id: string,
         status: string,
         title: string,
         date_created: string,
@@ -54,7 +55,16 @@
     </div>
     <div class="kanban-col__tasks">
         {#each tasks.sort((a, b) => formatDate(a.date_created) - formatDate(b.date_created)) as task}
-            <KanbanTask openEditModal={() => openEditModal(task.report_id)} dragParams={dragParams} onMouseDown={onMouseDown} temp={task.temp} id={task.report_id} taskTitle={task.title} arrayOfLabels={task.tags.map(tag => getLabelByText(tag.name))} />
+            <KanbanTask
+                openEditModal={() => openEditModal(task.report_id)}
+                dragParams={dragParams}
+                onMouseDown={onMouseDown}
+                temp={task.temp}
+                id={task.report_id}
+                taskTitle={task.title}
+                arrayOfLabels={task.tags && task.tags.map(tag => getLabelByText(tag.name)) || []} 
+                deleteTask={() => deleteTask(task.report_id)}
+            />
         {/each}
     </div>
 </div>

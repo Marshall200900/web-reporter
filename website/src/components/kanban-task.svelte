@@ -6,11 +6,12 @@
     import type { Label } from "./kanban-task-label.svelte";
     import TaskLabel from './kanban-task-label.svelte';
     export let taskTitle: string;
-    export let dragParams: { id: number, x: number, y: number, width: number, relX: number, relY: number };
+    export let dragParams: { id: string, x: number, y: number, width: number, relX: number, relY: number };
     export let temp: boolean;
-    export let id: number;
+    export let id: string;
     export let arrayOfLabels: Label[];
-    export let onMouseDown: (id: number, x: number, y: number, width: number, height: number, relX: number, relY: number) => void;
+    export let deleteTask: () => void;
+    export let onMouseDown: (id: string, x: number, y: number, width: number, height: number, relX: number, relY: number) => void;
     export let openEditModal: () => void;
     $: styleParams = "";
     $: if (temp) {
@@ -39,20 +40,17 @@
 <div
     class="task"
     style={styleParams}
-    on:mousedown={mouseDownHandler}
-    >
-    <span class="task__text" 
-    on:mousedown={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-    }}
-    on:click={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        openEditModal();
-    }}>
-        {taskTitle}
-    </span>
+    on:mousedown={mouseDownHandler}>
+    <div class="task__title-container">
+        <span class="task__text"> 
+            {taskTitle}
+        </span>
+        <span on:mousedown={(e) => {
+            e.stopPropagation();
+        }} on:click={deleteTask} class="task__text task__delete-btn"> 
+            Delete
+        </span>
+    </div>
     <div class="task__task-labels">
         {#each arrayOfLabels as label}
             <TaskLabel label={label} />
@@ -74,7 +72,13 @@
         &__text:hover {
             text-decoration: underline;
         }
-
+        &__title-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        &__delete-btn {
+            color: gray;
+        }
         &__task-labels {
             display: flex;
             flex-wrap: wrap;
